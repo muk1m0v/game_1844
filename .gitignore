@@ -5,45 +5,29 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json
 yarn.lock
-
-# Переменные окружения (важно!)
 .env
 .env.local
 .env.*.local
-
-# Логи
 logs/
 *.log
-
-# Временные файлы
 tmp/
 temp/
 *.tmp
-
-# Файлы операционной системы
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Файлы редакторов и IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 *.sublime-*
-
-# Файлы сборки / кэша
 dist/
 build/
 coverage/
 .nyc_output/
-
-# Базы данных (если локальные файлы)
 *.sqlite
 *.db
-
-# Прочее
 *.pid
 *.seed
 *.pid.lock
