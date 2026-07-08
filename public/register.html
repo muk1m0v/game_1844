@@ -9,9 +9,9 @@
 </head>
 <body>
     <div class="auth-wrapper">
-        <div class="auth-card">
+        <div class="auth-card fade-in">
             <div class="auth-brand">
-                <span class="brand-icon">⚡</span>
+                <span class="brand-icon">🌸</span>
                 <h1>Flash</h1>
             </div>
             <h2 class="auth-title">Создайте аккаунт</h2>
@@ -20,15 +20,24 @@
             <form id="registerForm" class="auth-form" autocomplete="off">
                 <div class="form-group">
                     <label for="username">Имя пользователя (уникальное)</label>
-                    <input type="text" id="username" placeholder="Придумайте имя" required />
+                    <div class="input-wrapper">
+                        <span class="icon">👤</span>
+                        <input type="text" id="username" placeholder="Придумайте имя" required />
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="password">Пароль (3–50 символов)</label>
-                    <input type="password" id="password" placeholder="Введите пароль" required />
+                    <div class="input-wrapper">
+                        <span class="icon">🔒</span>
+                        <input type="password" id="password" placeholder="Введите пароль" required />
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="phone">Телефон (+992123456789)</label>
-                    <input type="tel" id="phone" placeholder="+992123456789" pattern="^\+992\d{9}$" required />
+                    <div class="input-wrapper">
+                        <span class="icon">📞</span>
+                        <input type="tel" id="phone" placeholder="+992123456789" pattern="^\+992\d{9}$" required />
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
             </form>

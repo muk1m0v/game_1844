@@ -1,5 +1,5 @@
-/* Шрифт ANGST – подключаем через Google Fonts (альтернатива) */
-@import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
+/* Шрифт ANGST – подключаем через Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
 
 * {
     margin: 0;
@@ -7,102 +7,232 @@
     box-sizing: border-box;
 }
 
+:root {
+    --primary: #b4ff00;
+    --primary-dark: #8fcc00;
+    --secondary: #ff6b9d;
+    --accent: #c084fc;
+    --gold: #fbbf24;
+    --bg-dark: #0b0b0b;
+    --bg-card: #1a1a1a;
+    --bg-input: #0b0b0b;
+    --border-color: #2a2a2a;
+    --text-light: #ffffff;
+    --text-muted: #aaa;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --radius: 16px;
+    --transition: 0.3s ease;
+}
+
 body {
     font-family: 'Inter', 'ANGST', -apple-system, sans-serif;
-    background-color: #0b0b0b;
-    color: #ffffff;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
     line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Декоративные лепестки (фон) */
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+}
+body::before {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--secondary), transparent 70%);
+    top: -200px;
+    right: -200px;
+    animation: floatBlob 20s infinite alternate ease-in-out;
+}
+body::after {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--accent), transparent 70%);
+    bottom: -150px;
+    left: -150px;
+    animation: floatBlob 25s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes floatBlob {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, -30px) scale(1.1); }
 }
 
 a {
-    color: #b4ff00;
+    color: var(--primary);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color var(--transition);
 }
 a:hover {
-    color: #8fcc00;
+    color: var(--primary-dark);
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    position: relative;
+    z-index: 1;
 }
 
 /* Кнопки */
 .btn {
     display: inline-block;
-    background-color: #b4ff00;
-    color: #0b0b0b;
+    background: var(--primary);
+    color: var(--bg-dark);
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius);
     padding: 10px 24px;
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+    transition: all var(--transition);
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(180, 255, 0, 0.2);
 }
 .btn:hover {
-    background-color: #9ae600;
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(180, 255, 0, 0.3);
 }
 .btn:active {
     transform: scale(0.97);
 }
 .btn-secondary {
-    background-color: #2a2a2a;
-    color: #fff;
+    background: var(--bg-card);
+    color: var(--text-light);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 .btn-secondary:hover {
-    background-color: #3a3a3a;
+    background: #2a2a2a;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 .btn-block {
     display: block;
     width: 100%;
 }
+.btn-sm {
+    padding: 4px 14px;
+    font-size: 0.9rem;
+}
 
 /* Карточки */
 .card {
-    background: #1a1a1a;
-    border-radius: 10px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
     padding: 20px;
-    border: 1px solid #2a2a2a;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition);
 }
 
 /* Формы */
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 .form-group label {
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     font-weight: 500;
-    color: #ccc;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+.form-group .input-wrapper {
+    position: relative;
+}
+.form-group .input-wrapper .icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    pointer-events: none;
 }
 .form-group input {
     width: 100%;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    background-color: #0b0b0b;
-    color: #fff;
+    padding: 12px 14px 12px 44px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    background: var(--bg-input);
+    color: var(--text-light);
     font-size: 1rem;
+    transition: all var(--transition);
 }
 .form-group input:focus {
     outline: none;
-    border-color: #b4ff00;
-    box-shadow: 0 0 0 2px rgba(180, 255, 0, 0.3);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(180, 255, 0, 0.15);
+}
+.form-group input::placeholder {
+    color: #555;
 }
 
 /* Сообщения */
 .auth-message {
     margin: 12px 0;
-    padding: 10px;
-    border-radius: 10px;
-    background: #1a1a1a;
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    background: var(--bg-card);
     color: #ff6b6b;
     text-align: center;
+    border: 1px solid #ff6b6b33;
 }
 .auth-message.success {
-    color: #b4ff00;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Анимация появления */
+.fade-in {
+    animation: fadeIn 0.6s ease forwards;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Стили для хлебных крошек */
+.breadcrumb {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.breadcrumb span {
+    color: var(--text-light);
+}
+.breadcrumb a {
+    color: var(--primary);
+}
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+.breadcrumb .separator {
+    color: #555;
+}
+
+/* Футер (добавлен для всех страниц) */
+.footer {
+    margin-top: 60px;
+    padding: 30px 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+.footer span {
+    color: var(--secondary);
 }

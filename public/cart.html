@@ -11,7 +11,7 @@
     <header class="header">
         <div class="container header-inner">
             <div class="logo">
-                <span>⚡</span>
+                <span>🌸</span>
                 <h1>Flash</h1>
             </div>
             <nav class="nav">
@@ -28,13 +28,23 @@
             <div id="cartItems" class="cart-items"></div>
             <div class="cart-summary">
                 <div class="total">Итого: <span id="totalPrice">0</span> $</div>
-                <button id="clearCartBtn" class="btn btn-secondary">Очистить корзину</button>
+                <div class="cart-actions">
+                    <a href="/" class="btn btn-secondary">Продолжить покупки</a>
+                    <button id="clearCartBtn" class="btn btn-secondary">Очистить корзину</button>
+                </div>
             </div>
         </div>
-        <div id="emptyCart" style="display:none; color:#aaa; text-align:center; padding:40px 0;">
-            Корзина пуста. <a href="/">Перейти в каталог</a>
+        <div id="emptyCart" style="display:none; color:var(--text-muted); text-align:center; padding:60px 0;">
+            <span style="font-size:3rem;">🌸</span>
+            <p style="margin-top:12px;">Корзина пуста. <a href="/">Перейти в каталог</a></p>
         </div>
     </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>🌸 Flash — твой мир стиля и скорости. Сделано с любовью <span>❤</span></p>
+        </div>
+    </footer>
 
     <script src="/js/cart.js"></script>
 </body>

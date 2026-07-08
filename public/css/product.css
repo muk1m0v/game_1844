@@ -1,7 +1,11 @@
 .header {
-    background: #0b0b0b;
-    border-bottom: 1px solid #2a2a2a;
+    background: rgba(11, 11, 11, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
     padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 .header-inner {
     display: flex;
@@ -20,7 +24,9 @@
 }
 .logo h1 {
     font-size: 1.8rem;
-    color: #b4ff00;
+    background: linear-gradient(135deg, var(--primary), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-weight: 700;
     letter-spacing: -0.5px;
 }
@@ -30,17 +36,18 @@
     gap: 20px;
 }
 .nav-link {
-    color: #fff;
+    color: var(--text-light);
     font-weight: 500;
     padding: 6px 0;
     border-bottom: 2px solid transparent;
+    transition: all var(--transition);
 }
 .nav-link.active {
-    border-bottom-color: #b4ff00;
-    color: #b4ff00;
+    border-bottom-color: var(--primary);
+    color: var(--primary);
 }
 .nav-link:hover {
-    color: #b4ff00;
+    color: var(--primary);
 }
 
 .main {
@@ -48,21 +55,26 @@
 }
 
 .product-detail {
-    background: #1a1a1a;
-    border-radius: 10px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
     padding: 30px;
-    border: 1px solid #2a2a2a;
+    border: 1px solid var(--border-color);
     display: flex;
     gap: 30px;
     flex-wrap: wrap;
+    animation: fadeIn 0.6s ease;
 }
 .product-detail img {
     width: 100%;
     max-width: 400px;
     height: auto;
-    border-radius: 10px;
-    background: #2a2a2a;
+    border-radius: var(--radius);
+    background: var(--bg-input);
     object-fit: cover;
+    transition: transform var(--transition);
+}
+.product-detail img:hover {
+    transform: scale(1.02);
 }
 .product-info {
     flex: 1;
@@ -77,17 +89,23 @@
 .product-info .price {
     font-size: 2rem;
     font-weight: 700;
-    color: #b4ff00;
+    color: var(--primary);
 }
 .product-info .desc {
-    color: #aaa;
+    color: var(--text-muted);
     font-size: 1.1rem;
 }
 .product-info .btn {
     align-self: flex-start;
     padding: 12px 40px;
+    background: linear-gradient(135deg, var(--primary), var(--gold));
+    border: none;
+}
+.product-info .btn:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--gold));
 }
 
+/* Ссылка на товар в каталоге (чтобы карточка была кликабельной) */
 .product-link {
     display: block;
     text-decoration: none;
@@ -100,12 +118,14 @@
     margin-top: 12px;
     width: 100%;
     position: relative;
-    z-index: 2; /* чтобы кнопка была поверх ссылки */
+    z-index: 2;
 }
+
 @media (max-width: 700px) {
     .product-detail {
         flex-direction: column;
         align-items: center;
+        padding: 20px;
     }
     .product-info .btn {
         align-self: stretch;
