@@ -1,29 +1,33 @@
 <div class="card">
     <div class="shop-header">
+        <a href="/" class="btn-back" title="Назад"><i class="fas fa-arrow-left"></i></a>
         <h1><i class="fas fa-store-alt"></i> Магазин</h1>
         <div class="shop-balance">
             <span class="balance-amount"><%= balance %></span>
             <span class="balance-label">монет</span>
         </div>
-        <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Назад</a>
     </div>
 
     <% if (locals.message) { %>
         <div class="message-box" style="margin-bottom: 1rem;"><%= message %></div>
     <% } %>
 
-    <div class="shop-grid">
+    <div class="shop-list">
         <% items.forEach(item => { %>
             <div class="shop-item">
                 <div class="item-icon">
                     <i class="fas <%= item.effect_type === 'extra_attempt' ? 'fa-plus-circle' : 'fa-lightbulb' %>"></i>
                 </div>
-                <h3><%= item.name %></h3>
-                <p><%= item.description %></p>
-                <div class="item-price"><%= parseFloat(item.price).toFixed(2) %> монет</div>
-                <form action="/buy/<%= item.id %>" method="POST">
-                    <button type="submit" class="btn-primary buy-btn">Купить</button>
-                </form>
+                <div class="item-info">
+                    <h3><%= item.name %></h3>
+                    <p><%= item.description %></p>
+                </div>
+                <div class="item-action">
+                    <div class="item-price"><%= parseFloat(item.price).toFixed(2) %> монет</div>
+                    <form action="/buy/<%= item.id %>" method="POST">
+                        <button type="submit" class="btn-primary buy-btn">Купить</button>
+                    </form>
+                </div>
             </div>
         <% }) %>
     </div>
@@ -31,18 +35,42 @@
 
 <style>
 .shop-header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    margin-bottom: 1.8rem;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 .shop-header h1 {
     font-size: 1.8rem;
     font-weight: 700;
     margin: 0;
+    text-align: center;
+    grid-column: 2;
+}
+.shop-header .btn-back {
+    grid-column: 1;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    color: #a0a0a0;
+    text-decoration: none;
+    background: #f8f8fa;
+    transition: color 0.2s, transform 0.2s, background 0.2s;
+}
+.shop-header .btn-back:hover {
+    color: #00E676;
+    transform: scale(1.08);
+    background: rgba(0, 230, 118, 0.05);
 }
 .shop-balance {
+    grid-column: 3;
+    justify-self: end;
     text-align: right;
 }
 .shop-balance .balance-amount {
@@ -57,50 +85,90 @@
     letter-spacing: 0.5px;
     display: block;
 }
-.shop-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
+.shop-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     margin-top: 1rem;
 }
 .shop-item {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    gap: 1.25rem;
     background: #f8f8fa;
     border-radius: 20px;
-    padding: 1.5rem 1rem;
-    text-align: center;
+    padding: 1.1rem 1.4rem;
+    text-align: left;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 .shop-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
 .item-icon {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #00E676;
-    margin-bottom: 0.5rem;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 16px;
 }
-.shop-item h3 {
+.item-info h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    margin: 0.5rem 0 0.2rem;
+    margin: 0 0 0.3rem;
 }
-.shop-item p {
+.item-info p {
     font-size: 0.9rem;
     color: #666;
-    margin: 0.2rem 0 1rem;
+    margin: 0;
+}
+.item-action {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.6rem;
+    min-width: 130px;
 }
 .item-price {
     font-weight: 600;
     font-size: 1rem;
-    margin-bottom: 1rem;
     color: #1a1a1a;
 }
 .buy-btn {
     width: 100%;
-    max-width: 160px;
+    max-width: 130px;
     padding: 0.5rem 1rem;
 }
 @media (max-width: 600px) {
-    .shop-grid { grid-template-columns: 1fr; }
+    .shop-header h1 { font-size: 1.4rem; }
+    .shop-item {
+        grid-template-columns: 52px 1fr;
+        grid-template-areas:
+            "icon info"
+            "action action";
+        row-gap: 0.8rem;
+    }
+    .item-icon {
+        grid-area: icon;
+        width: 52px;
+        height: 52px;
+        font-size: 1.6rem;
+    }
+    .item-info { grid-area: info; }
+    .item-action {
+        grid-area: action;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 0;
+        width: 100%;
+    }
+    .buy-btn { max-width: 160px; }
 }
 </style>
