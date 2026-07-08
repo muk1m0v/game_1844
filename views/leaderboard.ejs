@@ -1,0 +1,42 @@
+<div class="card">
+    <div class="leader-header">
+        <h1><i class="fas fa-trophy" style="color: #00E676;"></i> Лидерборд</h1>
+        <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Назад к игре</a>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="leader-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Игрок</th>
+                    <th>Лучший результат</th>
+                    <th>Побед подряд</th>
+                    <th>Всего игр</th>
+                    <th>Баланс</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (users.length === 0) { %>
+                    <tr><td colspan="6" class="empty">Пока нет сыгранных игр 😔</td></tr>
+                <% } else { %>
+                    <% users.forEach((user, index) => { %>
+                        <tr class="<%= user.id === currentUserId ? 'current-user' : '' %>">
+                            <td>
+                                <% if (index === 0) { %><i class="fas fa-crown" style="color: #FFD700;"></i><% } 
+                                   else if (index === 1) { %><i class="fas fa-medal" style="color: #C0C0C0;"></i><% } 
+                                   else if (index === 2) { %><i class="fas fa-medal" style="color: #CD7F32;"></i><% } 
+                                   else { %><%= index + 1 %><% } %>
+                            </td>
+                            <td><strong><%= user.username %></strong></td>
+                            <td><%= user.best_result || '—' %></td>
+                            <td><%= user.win_streak || 0 %></td>
+                            <td><%= user.total_games || 0 %></td>
+                            <td><%= parseFloat(user.balance).toFixed(2) %></td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
