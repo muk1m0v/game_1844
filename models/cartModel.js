@@ -1,10 +1,11 @@
 const pool = require('./db');
 
 const Cart = {
-  // Получить корзину пользователя
+  // Получить все товары корзины пользователя
   async getByUser(userId) {
     const query = `
-      SELECT c.id, c.quantity, p.*
+      SELECT c.id, c.user_id, c.product_id, c.quantity, 
+             p.name, p.price, p.image_url
       FROM cart c
       JOIN products p ON c.product_id = p.id
       WHERE c.user_id = $1
@@ -13,25 +14,28 @@ const Cart = {
     return res.rows;
   },
 
-  // Добавить товар (или увеличить количество)
-  async addItem(userId, productId, quantity = 1) {
-    // Проверяем, есть ли уже такой товар в корзине
-    const existQuery = 'SELECT * FROM cart WHERE user_id = $1 AND product_id = $2';
-    const exist = await pool.query(existQuery, [userId, productId]);
-    if (exist.rows.length > 0) {
+  // Добавить товар в корзину
+  async addItem(userId, productId, quantity) {
+    // Проверяем, есть ли уже такой товар в корзине пользователя
+    const check = await pool.query(
+      'SELECT id, quantity FROM cart WHERE user_id = $1 AND product_id = $2',
+      [userId, productId]
+    );
+    if (check.rows.length > 0) {
       // Обновляем количество
-      const newQty = exist.rows[0].quantity + quantity;
-      const updateQuery = 'UPDATE cart SET quantity = $1 WHERE id = $2 RETURNING *';
-      const res = await pool.query(updateQuery, [newQty, exist.rows[0].id]);
-      return res.rows[0];
+      const newQty = check.rows[0].quantity + quantity;
+      const update = await pool.query(
+        'UPDATE cart SET quantity = $1 WHERE id = $2 RETURNING *',
+        [newQty, check.rows[0].id]
+      );
+      return update.rows[0];
     } else {
-      const insertQuery = `
-        INSERT INTO cart (user_id, product_id, quantity)
-        VALUES ($1, $2, $3)
-        RETURNING *
-      `;
-      const res = await pool.query(insertQuery, [userId, productId, quantity]);
-      return res.rows[0];
+      // Вставляем новую запись
+      const insert = await pool.query(
+        'INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *',
+        [userId, productId, quantity]
+      );
+      return insert.rows[0];
     }
   },
 
@@ -53,6 +57,13 @@ const Cart = {
   async clear(userId) {
     const query = 'DELETE FROM cart WHERE user_id = $1';
     await pool.query(query, [userId]);
+  },
+
+  // Получить позицию по ID (для проверки владельца)
+  async getById(cartId) {
+    const query = 'SELECT * FROM cart WHERE id = $1';
+    const res = await pool.query(query, [cartId]);
+    return res.rows[0];
   }
 };
 

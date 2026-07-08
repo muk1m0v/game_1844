@@ -1,5 +1,5 @@
 const pool = require('./db');
-const bcrypt = require('bcryptjs');  // вместо bcrypt
+const bcrypt = require('bcryptjs');
 
 const User = {
   // Создание пользователя
