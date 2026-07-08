@@ -1,38 +1,38 @@
-const token = localStorage.getItem('token');
-if (!token) {
-    window.location.href = '/login.html';
-}
+import { checkAuth, setupLogout, showToast, showConfirm } from './global.js';
 
-const logoutBtn = document.getElementById('logoutBtn');
-logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    window.location.href = '/login.html';
-});
+if (!checkAuth()) return;
+setupLogout();
 
 const cartItemsDiv = document.getElementById('cartItems');
 const emptyCartDiv = document.getElementById('emptyCart');
 const totalSpan = document.getElementById('totalPrice');
+const cartContainer = document.getElementById('cartContainer');
+const summaryDiv = cartContainer.querySelector('.cart-summary');
+
+let currentItems = [];
 
 async function loadCart() {
+    const token = localStorage.getItem('token');
     try {
         const res = await fetch('/api/cart', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!res.ok) throw new Error('Ошибка загрузки корзины');
-        const items = await res.json();
-        if (items.length === 0) {
+        currentItems = await res.json();
+
+        if (currentItems.length === 0) {
             cartItemsDiv.style.display = 'none';
             emptyCartDiv.style.display = 'block';
-            document.getElementById('cartContainer').querySelector('.cart-summary').style.display = 'none';
+            summaryDiv.style.display = 'none';
             return;
         }
+
         cartItemsDiv.style.display = 'flex';
         emptyCartDiv.style.display = 'none';
-        document.getElementById('cartContainer').querySelector('.cart-summary').style.display = 'flex';
+        summaryDiv.style.display = 'flex';
 
         let total = 0;
-        cartItemsDiv.innerHTML = items.map(item => {
+        cartItemsDiv.innerHTML = currentItems.map(item => {
             const price = parseFloat(item.price);
             const subtotal = price * item.quantity;
             total += subtotal;
@@ -56,14 +56,17 @@ async function loadCart() {
 
         totalSpan.textContent = total.toFixed(2);
 
-        // Обработчики
+        // Обработчики обновления
         document.querySelectorAll('.update-qty').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const cartItem = btn.closest('.cart-item');
+            btn.addEventListener('click', async (e) => {
+                const cartItem = e.target.closest('.cart-item');
                 const cartId = cartItem.dataset.cartid;
                 const input = cartItem.querySelector('.qty-input');
                 const qty = parseInt(input.value);
-                if (qty < 1) return alert('Количество должно быть >= 1');
+                if (qty < 1) {
+                    showToast('Количество должно быть ≥ 1', 'error');
+                    return;
+                }
                 try {
                     const res = await fetch(`/api/cart/${cartId}`, {
                         method: 'PUT',
@@ -74,27 +77,35 @@ async function loadCart() {
                         body: JSON.stringify({ quantity: qty })
                     });
                     if (!res.ok) throw new Error('Ошибка обновления');
-                    loadCart(); // перезагружаем
+                    showToast('Количество обновлено', 'success');
+                    loadCart();
                 } catch (err) {
-                    alert('Не удалось обновить');
+                    showToast('Не удалось обновить', 'error');
                 }
             });
         });
 
+        // Обработчики удаления
         document.querySelectorAll('.remove-item').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const cartItem = btn.closest('.cart-item');
+            btn.addEventListener('click', async (e) => {
+                const cartItem = e.target.closest('.cart-item');
                 const cartId = cartItem.dataset.cartid;
-                if (!confirm('Удалить товар из корзины?')) return;
+                const confirmed = await showConfirm('Удалить этот товар из корзины?');
+                if (!confirmed) return;
+
+                // Анимация удаления
+                cartItem.classList.add('cart-item-removing');
                 try {
                     const res = await fetch(`/api/cart/${cartId}`, {
                         method: 'DELETE',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     if (!res.ok) throw new Error('Ошибка удаления');
-                    loadCart();
+                    showToast('Товар удалён', 'success');
+                    setTimeout(() => loadCart(), 300);
                 } catch (err) {
-                    alert('Не удалось удалить');
+                    showToast('Не удалось удалить', 'error');
+                    cartItem.classList.remove('cart-item-removing');
                 }
             });
         });
@@ -107,16 +118,18 @@ async function loadCart() {
 
 // Очистка корзины
 document.getElementById('clearCartBtn').addEventListener('click', async () => {
-    if (!confirm('Очистить корзину?')) return;
+    const confirmed = await showConfirm('Очистить всю корзину?');
+    if (!confirmed) return;
     try {
         const res = await fetch('/api/cart', {
             method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         if (!res.ok) throw new Error('Ошибка очистки');
+        showToast('Корзина очищена', 'success');
         loadCart();
     } catch (err) {
-        alert('Не удалось очистить корзину');
+        showToast('Не удалось очистить корзину', 'error');
     }
 });
 

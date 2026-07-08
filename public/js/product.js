@@ -1,16 +1,8 @@
-const token = localStorage.getItem('token');
-if (!token) {
-    window.location.href = '/login.html';
-}
+import { checkAuth, setupLogout, showToast } from './global.js';
 
-const logoutBtn = document.getElementById('logoutBtn');
-logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    window.location.href = '/login.html';
-});
+if (!checkAuth()) return;
+setupLogout();
 
-// Получаем ID из URL
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get('id');
 
@@ -21,11 +13,14 @@ if (!productId) {
 }
 
 async function loadProduct(id) {
+    const container = document.getElementById('productDetail');
+    container.innerHTML = '<div style="text-align:center;padding:40px;">⏳ Загрузка...</div>';
+
     try {
         const res = await fetch(`/api/products/${id}`);
         if (!res.ok) {
             if (res.status === 404) {
-                document.getElementById('productDetail').innerHTML = '<p style="color:#ff6b6b;">Товар не найден</p>';
+                container.innerHTML = '<p style="color:#ff6b6b;">Товар не найден</p>';
                 return;
             }
             throw new Error('Ошибка загрузки');
@@ -34,7 +29,7 @@ async function loadProduct(id) {
         renderProduct(product);
     } catch (err) {
         console.error(err);
-        document.getElementById('productDetail').innerHTML = '<p style="color:#ff6b6b;">Не удалось загрузить товар</p>';
+        container.innerHTML = '<p style="color:#ff6b6b;">Не удалось загрузить товар</p>';
     }
 }
 
@@ -50,9 +45,7 @@ function renderProduct(product) {
         </div>
     `;
 
-    // Обработчик добавления в корзину
-    const addBtn = container.querySelector('.add-to-cart');
-    addBtn.addEventListener('click', async () => {
+    container.querySelector('.add-to-cart').addEventListener('click', async () => {
         await addToCart(product.id);
     });
 }
@@ -60,7 +53,7 @@ function renderProduct(product) {
 async function addToCart(productId) {
     const token = localStorage.getItem('token');
     if (!token) {
-        alert('Войдите в систему');
+        showToast('Войдите в систему', 'error');
         return;
     }
     try {
@@ -74,11 +67,11 @@ async function addToCart(productId) {
         });
         if (!res.ok) {
             const err = await res.json();
-            alert(err.error || 'Ошибка добавления');
+            showToast(err.error || 'Ошибка добавления', 'error');
             return;
         }
-        alert('Товар добавлен в корзину!');
+        showToast('✅ Товар добавлен в корзину!', 'success');
     } catch (err) {
-        alert('Ошибка соединения');
+        showToast('Ошибка соединения', 'error');
     }
 }

@@ -1,3 +1,5 @@
+import { showToast } from './global.js';
+
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value.trim();
@@ -5,7 +7,6 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     const phone = document.getElementById('phone').value.trim();
     const msgDiv = document.getElementById('registerMessage');
 
-    // Простая валидация на клиенте
     if (password.length < 3 || password.length > 50) {
         msgDiv.textContent = 'Пароль должен быть от 3 до 50 символов';
         msgDiv.className = 'auth-message';
@@ -31,6 +32,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         }
         msgDiv.textContent = '✅ Регистрация успешна! Теперь войдите.';
         msgDiv.className = 'auth-message success';
+        showToast('Аккаунт создан!', 'success');
         document.getElementById('registerForm').reset();
         setTimeout(() => {
             window.location.href = '/login.html';

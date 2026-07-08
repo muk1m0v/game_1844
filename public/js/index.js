@@ -1,57 +1,53 @@
-// Проверка авторизации
-const token = localStorage.getItem('token');
-if (!token) {
-    window.location.href = '/login.html';
-}
+import { checkAuth, setupLogout, showToast } from './global.js';
 
-const logoutBtn = document.getElementById('logoutBtn');
-logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    window.location.href = '/login.html';
-});
+if (!checkAuth()) {
+    // редирект уже внутри
+}
+setupLogout();
 
 // Загрузка товаров
 async function loadProducts() {
+    const container = document.getElementById('productList');
+    container.innerHTML = '<div style="text-align:center;padding:40px;">⏳ Загрузка...</div>';
+
     try {
         const res = await fetch('/api/products');
         if (!res.ok) throw new Error('Ошибка загрузки');
         const products = await res.json();
-        const container = document.getElementById('productList');
         if (products.length === 0) {
-            container.innerHTML = '<p style="color:#aaa;">Товары скоро появятся</p>';
+            container.innerHTML = '<p style="color:var(--text-muted);text-align:center;">Товары скоро появятся</p>';
             return;
         }
         container.innerHTML = products.map(p => `
-            <div class="product-card">
+            <div class="product-card" data-id="${p.id}">
                 <a href="/product.html?id=${p.id}" class="product-link">
                     <img src="${p.image_url || '/images/placeholder.jpg'}" alt="${p.name}" />
                     <h3>${p.name}</h3>
                     <div class="price">$${p.price}</div>
                     <div class="desc">${p.description || ''}</div>
                 </a>
-                <button class="btn btn-primary add-to-cart" data-id="${p.id}" data-name="${p.name}">В корзину</button>
+                <button class="btn btn-primary add-to-cart" data-id="${p.id}">В корзину</button>
             </div>
         `).join('');
 
-        // Обработчики добавления в корзину (без перехода)
+        // Обработчики добавления
         document.querySelectorAll('.add-to-cart').forEach(btn => {
             btn.addEventListener('click', async (e) => {
-                e.stopPropagation(); // чтобы не сработал переход по ссылке
+                e.stopPropagation();
                 const productId = btn.dataset.id;
                 await addToCart(productId);
             });
         });
     } catch (err) {
         console.error(err);
-        document.getElementById('productList').innerHTML = '<p style="color:#ff6b6b;">Не удалось загрузить товары</p>';
+        container.innerHTML = '<p style="color:#ff6b6b;text-align:center;">Не удалось загрузить товары</p>';
     }
 }
 
 async function addToCart(productId) {
     const token = localStorage.getItem('token');
     if (!token) {
-        alert('Войдите в систему');
+        showToast('Войдите в систему', 'error');
         return;
     }
     try {
@@ -65,12 +61,12 @@ async function addToCart(productId) {
         });
         if (!res.ok) {
             const err = await res.json();
-            alert(err.error || 'Ошибка добавления');
+            showToast(err.error || 'Ошибка добавления', 'error');
             return;
         }
-        alert('Товар добавлен в корзину!');
+        showToast('✅ Товар добавлен в корзину!', 'success');
     } catch (err) {
-        alert('Ошибка соединения');
+        showToast('Ошибка соединения', 'error');
     }
 }
 

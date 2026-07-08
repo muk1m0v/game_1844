@@ -1,3 +1,5 @@
+import { showToast } from './global.js';
+
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value.trim();
@@ -16,11 +18,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             msgDiv.className = 'auth-message';
             return;
         }
-        // Сохраняем токен и данные пользователя
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         msgDiv.textContent = '✅ Успешный вход! Перенаправление...';
         msgDiv.className = 'auth-message success';
+        showToast('Добро пожаловать!', 'success');
         setTimeout(() => {
             window.location.href = '/';
         }, 1000);
