@@ -1,0 +1,108 @@
+/* Шрифт ANGST – подключаем через Google Fonts (альтернатива) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'ANGST', -apple-system, sans-serif;
+    background-color: #0b0b0b;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+a {
+    color: #b4ff00;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+a:hover {
+    color: #8fcc00;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Кнопки */
+.btn {
+    display: inline-block;
+    background-color: #b4ff00;
+    color: #0b0b0b;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    text-align: center;
+}
+.btn:hover {
+    background-color: #9ae600;
+}
+.btn:active {
+    transform: scale(0.97);
+}
+.btn-secondary {
+    background-color: #2a2a2a;
+    color: #fff;
+}
+.btn-secondary:hover {
+    background-color: #3a3a3a;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Карточки */
+.card {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #2a2a2a;
+}
+
+/* Формы */
+.form-group {
+    margin-bottom: 16px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: #ccc;
+}
+.form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background-color: #0b0b0b;
+    color: #fff;
+    font-size: 1rem;
+}
+.form-group input:focus {
+    outline: none;
+    border-color: #b4ff00;
+    box-shadow: 0 0 0 2px rgba(180, 255, 0, 0.3);
+}
+
+/* Сообщения */
+.auth-message {
+    margin: 12px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background: #1a1a1a;
+    color: #ff6b6b;
+    text-align: center;
+}
+.auth-message.success {
+    color: #b4ff00;
+}

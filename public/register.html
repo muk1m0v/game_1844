@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flash — Регистрация</title>
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/register.css" />
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <span class="brand-icon">⚡</span>
+                <h1>Flash</h1>
+            </div>
+            <h2 class="auth-title">Создайте аккаунт</h2>
+            <p class="auth-subtitle">Присоединяйтесь к Flash</p>
+
+            <form id="registerForm" class="auth-form" autocomplete="off">
+                <div class="form-group">
+                    <label for="username">Имя пользователя (уникальное)</label>
+                    <input type="text" id="username" placeholder="Придумайте имя" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль (3–50 символов)</label>
+                    <input type="password" id="password" placeholder="Введите пароль" required />
+                </div>
+                <div class="form-group">
+                    <label for="phone">Телефон (+992123456789)</label>
+                    <input type="tel" id="phone" placeholder="+992123456789" pattern="^\+992\d{9}$" required />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+            </form>
+
+            <div id="registerMessage" class="auth-message"></div>
+
+            <p class="auth-switch">
+                Уже есть аккаунт? <a href="/login.html">Войти</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/register.js"></script>
+</body>
+</html>

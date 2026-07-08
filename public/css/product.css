@@ -1,0 +1,113 @@
+.header {
+    background: #0b0b0b;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 16px 0;
+}
+.header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.logo span {
+    font-size: 2rem;
+}
+.logo h1 {
+    font-size: 1.8rem;
+    color: #b4ff00;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.nav-link {
+    color: #fff;
+    font-weight: 500;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+}
+.nav-link.active {
+    border-bottom-color: #b4ff00;
+    color: #b4ff00;
+}
+.nav-link:hover {
+    color: #b4ff00;
+}
+
+.main {
+    padding: 30px 0;
+}
+
+.product-detail {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 30px;
+    border: 1px solid #2a2a2a;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+.product-detail img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+    background: #2a2a2a;
+    object-fit: cover;
+}
+.product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.product-info h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+.product-info .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #b4ff00;
+}
+.product-info .desc {
+    color: #aaa;
+    font-size: 1.1rem;
+}
+.product-info .btn {
+    align-self: flex-start;
+    padding: 12px 40px;
+}
+
+.product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+.product-link:hover {
+    color: inherit;
+}
+.product-card .btn {
+    margin-top: 12px;
+    width: 100%;
+    position: relative;
+    z-index: 2; /* чтобы кнопка была поверх ссылки */
+}
+@media (max-width: 700px) {
+    .product-detail {
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-info .btn {
+        align-self: stretch;
+    }
+}
